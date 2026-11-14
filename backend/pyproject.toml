@@ -1,0 +1,18 @@
+[project]
+name = "vaedoc-authorise-api"
+version = "0.2.0"
+requires-python = ">=3.12,<3.14"
+dependencies = [
+  "fastapi==0.163.0",
+  "uvicorn==0.54.0",
+  "SQLAlchemy==2.0.57",
+  "alembic==1.20.1",
+  "PyMySQL==1.2.4",
+  "psycopg[binary]==3.3.9",
+  "pwdlib[argon2]==0.4.0",
+  "certifi==2026.10.23",
+  "email-validator==2.4.0",
+]
+
+[tool.vercel]
+entrypoint = "main:app"
