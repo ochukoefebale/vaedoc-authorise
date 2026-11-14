@@ -1,4 +1,5 @@
 import { NextRequest } from "next/server";
+import { getVercelOidcToken } from "@vercel/oidc";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -22,9 +23,6 @@ async function proxy(
       { status: 503 },
     );
   const headers = new Headers({ Accept: "application/json" });
-  // Hosting-issued identity; never accept this header from the browser.
-  if (process.env.VERCEL_OIDC_TOKEN)
-    headers.set("x-vercel-trusted-oidc-idp-token", process.env.VERCEL_OIDC_TOKEN);
   for (const key of ["content-type", "cookie", "origin", "x-csrf-token"]) {
     const value = request.headers.get(key);
     if (value) headers.set(key, value);
@@ -41,6 +39,8 @@ async function proxy(
       return Response.json({ error: "Payload too large." }, { status: 413 });
   }
   try {
+    if (process.env.VERCEL === "1")
+      headers.set("x-vercel-trusted-oidc-idp-token", await getVercelOidcToken());
     const upstream = await fetch(
       `${base.replace(/\/$/, "")}/api/${path.join("/")}`,
       {
