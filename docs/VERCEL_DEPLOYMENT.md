@@ -4,6 +4,12 @@ Target frontend: `https://authorise.vaedoc.com`. Deploy **two Vercel projects fr
 
 ## 1. Database choice
 
+**Selected for this deployment: Neon PostgreSQL Free.** Provision a dedicated `vaedoc-authorise` database/project. Select the Free plan explicitly; do not enable a paid upgrade or paid add-ons. Connect it only to the FastAPI backend project. Keep production and development/preview data separate; do not attach the production database to all environments by default.
+
+Preferred setup: use Vercel Marketplace's Neon integration once the Vercel account and backend project are linked. Verify the provisioned environment variable names: the Python backend requires `DATABASE_URL`. The value should be Neon's pooled PostgreSQL URL. `postgresql://` is accepted and normalised to the installed psycopg driver, so an integration-issued URL does not need manual credential editing. Keep any direct connection URL available only to trusted migration administration if required.
+
+After provisioned environment keys are verified, run the existing migration command against this new database, create the initial administrator, and test authenticated request persistence. Until those steps pass, database setup is pending rather than complete. No MySQL migration or copy of existing Vaedoc data is required.
+
 **Your existing MySQL database is suitable** if it is reachable from Vercel, supports TLS with a valid certificate, and has sufficient connection capacity. Prefer a dedicated `vaedoc_authorise` database and restricted runtime account. Keep unrelated Vaedoc databases inaccessible to this account. Do not open MySQL unrestricted to the internet just to make connectivity work. Coordinate network access with your hosting provider; Vercel outbound networking requirements depend on its configuration.
 
 **Free alternative: Neon PostgreSQL.** Its current pricing page lists a free tier; check the current limits at https://neon.com/pricing before provisioning. Use the provided pooled PostgreSQL connection endpoint and keep backend/database regions close. Choose a paid/appropriate service level and data arrangements when piloting with real patient information. Free storage does not make hosting, AI or email free.

@@ -2,6 +2,8 @@
 
 A hospital managed care authorisation workspace. This independently deployable release uses a standard **Next.js frontend** and **FastAPI backend**, supports **MySQL and PostgreSQL**, and implements **invitation-only staff accounts**.
 
+**Selected deployment database: Neon PostgreSQL Free.** The backend uses Neon's pooled connection endpoint; database credentials stay in the FastAPI project's environment. Existing Vaedoc MySQL databases are not part of this deployment.
+
 The clinical workflow is a supervised demonstration: synthetic records, source-based request templates, simulated insurer replies, item-level staff verification and simulated EMR callback acknowledgement/retry. Live AI, external email and EMR integration remain outside this release. Do not enter real patient information yet.
 
 ## Deployment
