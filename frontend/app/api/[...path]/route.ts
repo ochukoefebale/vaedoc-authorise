@@ -22,6 +22,9 @@ async function proxy(
       { status: 503 },
     );
   const headers = new Headers({ Accept: "application/json" });
+  // Hosting-issued identity; never accept this header from the browser.
+  if (process.env.VERCEL_OIDC_TOKEN)
+    headers.set("x-vercel-trusted-oidc-idp-token", process.env.VERCEL_OIDC_TOKEN);
   for (const key of ["content-type", "cookie", "origin", "x-csrf-token"]) {
     const value = request.headers.get(key);
     if (value) headers.set(key, value);
